@@ -1,0 +1,28 @@
+# Stage 1: 빌드 단계
+FROM node:lts-alpine
+
+WORKDIR /home/ubuntu/Wooriya_LandingPage
+
+# 소스 코드 복사
+COPY package.json package-lock.json ./
+COPY . .
+
+# 필요한 패키지 설치 및 Next.js 앱 빌드
+RUN npm install -g npm@9.8.1
+RUN npm i
+RUN npm run build
+
+# 빌드된 Next.js 앱 복사
+# COPY /home/ubuntu/Wooriya_LandingPage/.next .next
+
+# Nginx 구성 파일 복사
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# Nginx 설치
+# RUN apk add --update nginx
+
+# PM2를 전역으로 설치
+RUN npm install -g pm2
+
+# Nginx와 Next.js 앱을 실행
+CMD ["sh", "-c", "pm2-runtime start npm -- start"]
